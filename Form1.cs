@@ -19,6 +19,7 @@ namespace changeFilesNamesApp
         private string rutaGeneral = "";
         private DirectoryInfo di;
         private CheckBox folderUnificado;
+        private bool corrupcion = false;
 
         public Form1()
         {
@@ -111,6 +112,7 @@ namespace changeFilesNamesApp
             int ordenNumerico = 1;
             string[] rutaArray = ruta.Split('\\');
             prefijoTxt.Text = rutaArray[rutaArray.Length - 1] + "_";
+            corrupcion = false;
 
             dataGridView1.Rows.Clear();
             dataGridView2.Rows.Clear();
@@ -157,6 +159,14 @@ namespace changeFilesNamesApp
                 }
             }
 
+            if(dataGridView2.Rows.Count > 0)
+            {
+                folderUnificado.Enabled = true;
+            }
+            else
+            {
+                folderUnificado.Enabled = false;
+            }
         }
 
         private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -236,7 +246,18 @@ namespace changeFilesNamesApp
             {
                 foreach (DataGridViewRow d in dataGridView2.Rows) 
                 {
-                    File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/data/" + d.Cells[0].Value.ToString());
+                    try
+                    {
+                        File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/data/" + d.Cells[0].Value.ToString());
+                    }
+                    catch (System.IO.FileNotFoundException ex)
+                    {
+                        if (!corrupcion)
+                        {
+                            MessageBox.Show("Uno o más de los archivos, no se encuentra; pudo haber sido borrado manualmente o el folder está corrompido");
+                            corrupcion = true;
+                        }
+                    }
                 }
             }
 
@@ -287,7 +308,18 @@ namespace changeFilesNamesApp
                     {
                         if (File.Exists(rutaGeneral + "/data/ordn.txt"))
                         {
-                            File.Move(rutaGeneral + "/data/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                            try
+                            {
+                                File.Move(rutaGeneral + "/data/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                            }
+                            catch (System.IO.FileNotFoundException ex)
+                            {
+                                if (!corrupcion)
+                                {
+                                    MessageBox.Show("Uno o más de los archivos, no se encuentra; pudo haber sido borrado manualmente o el folder está corrompido");
+                                    corrupcion = true;
+                                }
+                            }
                         }
                         else
                         {
@@ -425,6 +457,42 @@ namespace changeFilesNamesApp
                     folderUnificado.Checked = false;
                     scanAndgroupBtn.Enabled = true;
                     return;
+                }
+
+                if (cuentaFiles <= 3)
+                {
+                    di = new DirectoryInfo(rutaGeneral);
+                    int _g = 0, _m = 0, _p = 0;
+                    foreach (var f in di.GetFiles())
+                    {
+                        if (f.Extension.Equals(".jpg") || f.Extension.Equals(".png") || f.Extension.Equals(".gif") || f.Extension.Equals(".bmp"))
+                        {
+                            if(f.Name.IndexOf("_G") > -1 || f.Name.IndexOf("_G.") > -1)
+                            {
+                                _g++;
+                            }
+                            else if (f.Name.IndexOf("_M") > -1 || f.Name.IndexOf("_M_") > -1)
+                            {
+                                _m++;
+                            }
+                            else if (f.Name.IndexOf("_P") > -1 || f.Name.IndexOf("_P") > -1)
+                            {
+                                _p++;
+                            }
+                        }
+                    }
+
+                    if(_g < 2  && _m < 2 && _p < 2)
+                    {
+                        //--
+                    }
+                    else
+                    {
+                        MessageBox.Show("Para opción de Fotos básicas de producto, no debe haber más de una foto, con el nombre de nomenclatura permitida");
+                        folderUnificado.Checked = false;
+                        scanAndgroupBtn.Enabled = true;
+                        return;
+                    }
                 }
 
             }

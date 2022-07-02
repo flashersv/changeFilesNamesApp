@@ -251,6 +251,7 @@ namespace changeFilesNamesApp
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
+            this.checkBox3.Enabled = false;
             this.checkBox3.Location = new System.Drawing.Point(552, 160);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(197, 21);
