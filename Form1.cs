@@ -143,6 +143,20 @@ namespace changeFilesNamesApp
             dataGridView1.Sort(dataGridView1.Columns[0], ListSortDirection.Ascending);
             dataGridView2.Sort(dataGridView2.Columns[0], ListSortDirection.Ascending);
 
+            if(File.Exists(ruta + "/data/ordn.txt"))
+            {
+                dataGridView2.Rows.Clear();
+                using (StreamReader sr = new StreamReader(ruta + "/data/ordn.txt"))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] ss = line.Split(':');
+                        dataGridView2.Rows.Add(ss[0], "File", ss[1]);
+                    }
+                }
+            }
+
         }
 
         private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -167,8 +181,21 @@ namespace changeFilesNamesApp
         {
             int pocision = 0;
             string agregarAPrefijo = "";
+            ArrayList lineasArchivos = new ArrayList();
+            int i = 0;
 
-            if(dataGridView2.Rows.Count < 1)
+            foreach(DataGridViewRow row in dataGridView2.Rows) 
+            {
+                if (row.Cells[1].Value.ToString().ToLower().Equals("file")) ;
+                {
+                    i++;
+                }
+            };
+
+            //lineasArchivos = new string[i];
+            i = 1;
+
+            if (dataGridView2.Rows.Count < 1)
             {
                 return;
             }
@@ -239,15 +266,37 @@ namespace changeFilesNamesApp
                     {
 
                         File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + ".jpg");
+                        lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + ".jpg:1");
                     }
                     else
                     {
-                        File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length -1) + agregarAPrefijo + "_" + orden + ".jpg");
+                        if (File.Exists(rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg")) 
+                        {
+                            File.Decrypt(rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                        }
+                        File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                        i++;
+                        lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg:" + i);
+                        }
+                        
                     }
                 }
+            if (!Directory.Exists(rutaGeneral + "/data/"))
+            {
+                Directory.CreateDirectory(rutaGeneral + "/data/");
             }
-
-
+            if (File.Exists(rutaGeneral + "/data/ordn.txt"))
+            {
+                File.Delete(rutaGeneral + "/data/ordn.txt");
+            }
+            //File.Create(rutaGeneral + "/data/ordn.txt");
+            using (StreamWriter st = File.CreateText(rutaGeneral + "/data/ordn.txt"))
+            {
+                foreach (var s in lineasArchivos)
+                {
+                    st.WriteLine(s);
+                }
+            }
 
             CargaDeArchivos(rutaGeneral);
 
@@ -256,6 +305,9 @@ namespace changeFilesNamesApp
                 CrearArticulos();
             }
         }
+    }
+
+            
 
         
 
