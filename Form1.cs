@@ -231,6 +231,15 @@ namespace changeFilesNamesApp
                 }
                 pocision++;
             }
+
+            if(File.Exists(rutaGeneral + "/data/ordn.txt"))
+            {
+                foreach (DataGridViewRow d in dataGridView2.Rows) 
+                {
+                    File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/data/" + d.Cells[0].Value.ToString());
+                }
+            }
+
             foreach(DataGridViewRow d in dataGridView2.Rows)
             {
                 if (d.Cells[1].Value.ToString().ToLower() != "folder")
@@ -264,23 +273,32 @@ namespace changeFilesNamesApp
 
                     if (Convert.ToInt32(d.Cells[2].Value) == 1)
                     {
-
-                        File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + ".jpg");
+                        if (File.Exists(rutaGeneral + "/data/ordn.txt"))
+                        {
+                            File.Move(rutaGeneral + "/data/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + ".jpg");
+                        }
+                        else
+                        {
+                            File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + ".jpg");
+                        }
                         lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + ".jpg:1");
                     }
                     else
                     {
-                        if (File.Exists(rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg")) 
+                        if (File.Exists(rutaGeneral + "/data/ordn.txt"))
                         {
-                            File.Decrypt(rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                            File.Move(rutaGeneral + "/data/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
                         }
-                        File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                        else
+                        {
+                            File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                        }
                         i++;
                         lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg:" + i);
-                        }
-                        
                     }
+                        
                 }
+            }
             if (!Directory.Exists(rutaGeneral + "/data/"))
             {
                 Directory.CreateDirectory(rutaGeneral + "/data/");
@@ -289,7 +307,9 @@ namespace changeFilesNamesApp
             {
                 File.Delete(rutaGeneral + "/data/ordn.txt");
             }
-            //File.Create(rutaGeneral + "/data/ordn.txt");
+
+            //string[,] losArchivosImg = lineasArchivos.ToArray(typeof(string)) as string[lineasArchivos.Count, 2];
+
             using (StreamWriter st = File.CreateText(rutaGeneral + "/data/ordn.txt"))
             {
                 foreach (var s in lineasArchivos)
@@ -305,11 +325,6 @@ namespace changeFilesNamesApp
                 CrearArticulos();
             }
         }
-    }
-
-            
-
-        
 
         private void dataGridView2_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -336,20 +351,20 @@ namespace changeFilesNamesApp
             parentFolder = Directory.GetParent(rutaGeneral).ToString();
             di = new DirectoryInfo(rutaGeneral);
             ArrayList archivos = new ArrayList();
-            
+
             foreach (var d in di.GetFiles())
             {
                 archivos.Add(d.Name);
             }
 
-            foreach(var s in di.GetFiles())
+            foreach (var s in di.GetFiles())
             {
                 nombreProducto = s.Name;
                 Regex regExp = new Regex(@"[a-zA-Z0-9]+_[a-zA-Z0-9]_\d\.[a-zA-Z]+");
-                if(!regExp.IsMatch(nombreProducto))
+                if (!regExp.IsMatch(nombreProducto))
                 {
                     nombreArticulos.Add(s.Name);
-                        
+
                 }
             }
 
@@ -359,7 +374,7 @@ namespace changeFilesNamesApp
                 di.Create();
             }
 
-            foreach(string a in nombreArticulos)
+            foreach (string a in nombreArticulos)
             {
                 string articuloP1 = a.Insert(4, "-");
                 string[] articuloP2 = articuloP1.Split('_');
@@ -393,7 +408,7 @@ namespace changeFilesNamesApp
             {
                 scanAndgroupBtn.Enabled = false;
                 //--
-                
+
                 int cuentaFiles = 0;
 
                 foreach (DataGridViewRow r in dataGridView2.Rows)
@@ -411,7 +426,7 @@ namespace changeFilesNamesApp
                     scanAndgroupBtn.Enabled = true;
                     return;
                 }
-                
+
             }
             else
             {
@@ -435,8 +450,8 @@ namespace changeFilesNamesApp
                     scanAndgroupBtn.Enabled = true;
                 }
             }
-            
-            
+
+
         }
 
         private void scanAndgroupBtn_Click(object sender, EventArgs e)
@@ -444,7 +459,7 @@ namespace changeFilesNamesApp
             string rutaDeDestino, rutaDeLlegada = "";
             string[] prefijoRuta = rutaGeneral.Split('\\');
 
-            foreach(DataGridViewRow f in dataGridView2.Rows)
+            foreach (DataGridViewRow f in dataGridView2.Rows)
             {
                 if (f.Cells[1].Value.ToString().ToLower().Equals("folder")) { goto FinalLoop; }
 
@@ -454,13 +469,13 @@ namespace changeFilesNamesApp
                 {
                     using (Image img = Image.FromFile(rutaGeneral + "/" + file.Name))
                     {
-                        if (img.Width == 735 && img.Height == 735) 
+                        if (img.Width == 735 && img.Height == 735)
                         {
-                            if(!Directory.Exists(rutaGeneral + "/" + prefijoRuta[prefijoRuta.Length - 1] + "_G/"))
+                            if (!Directory.Exists(rutaGeneral + "/" + prefijoRuta[prefijoRuta.Length - 1] + "_G/"))
                             {
                                 Directory.CreateDirectory(rutaGeneral + "/" + prefijoRuta[prefijoRuta.Length - 1] + "_G/");
                             }
-                            
+
                             rutaDeLlegada = rutaGeneral + "/" + prefijoRuta[prefijoRuta.Length - 1] + "_G/" + file.Name;
                         }
                         else if (img.Width == 535 && img.Height == 535)
@@ -484,10 +499,11 @@ namespace changeFilesNamesApp
                 rutaDeDestino = file.FullName;
                 File.Move(rutaDeDestino, rutaDeLlegada);
 
-                FinalLoop:
+            FinalLoop:
                 Console.WriteLine("Ignora folder");
             }
             CargaDeArchivos(rutaGeneral);
         }
     }
-}
+}       
+
