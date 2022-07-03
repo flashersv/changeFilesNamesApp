@@ -50,6 +50,7 @@ namespace changeFilesNamesApp
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.scanAndgroupBtn = new System.Windows.Forms.Button();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -201,7 +202,7 @@ namespace changeFilesNamesApp
             // 
             // prefijoTxt
             // 
-            this.prefijoTxt.Location = new System.Drawing.Point(552, 131);
+            this.prefijoTxt.Location = new System.Drawing.Point(555, 114);
             this.prefijoTxt.Name = "prefijoTxt";
             this.prefijoTxt.Size = new System.Drawing.Size(236, 22);
             this.prefijoTxt.TabIndex = 9;
@@ -209,7 +210,7 @@ namespace changeFilesNamesApp
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(549, 111);
+            this.label4.Location = new System.Drawing.Point(552, 94);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(107, 17);
             this.label4.TabIndex = 10;
@@ -230,7 +231,7 @@ namespace changeFilesNamesApp
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(552, 189);
+            this.checkBox1.Location = new System.Drawing.Point(555, 170);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(140, 21);
             this.checkBox1.TabIndex = 12;
@@ -240,7 +241,7 @@ namespace changeFilesNamesApp
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(552, 216);
+            this.checkBox2.Location = new System.Drawing.Point(555, 197);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(186, 21);
             this.checkBox2.TabIndex = 13;
@@ -252,7 +253,7 @@ namespace changeFilesNamesApp
             // 
             this.checkBox3.AutoSize = true;
             this.checkBox3.Enabled = false;
-            this.checkBox3.Location = new System.Drawing.Point(552, 160);
+            this.checkBox3.Location = new System.Drawing.Point(555, 143);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(197, 21);
             this.checkBox3.TabIndex = 14;
@@ -270,11 +271,22 @@ namespace changeFilesNamesApp
             this.scanAndgroupBtn.UseVisualStyleBackColor = true;
             this.scanAndgroupBtn.Click += new System.EventHandler(this.scanAndgroupBtn_Click);
             // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(555, 224);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(146, 21);
+            this.checkBox4.TabIndex = 16;
+            this.checkBox4.Text = "Más de un artículo";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 586);
+            this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.scanAndgroupBtn);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.checkBox2);
@@ -323,6 +335,7 @@ namespace changeFilesNamesApp
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Button scanAndgroupBtn;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
 
