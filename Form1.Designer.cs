@@ -280,6 +280,7 @@ namespace changeFilesNamesApp
             this.checkBox4.TabIndex = 16;
             this.checkBox4.Text = "Más de un artículo";
             this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.Click += new System.EventHandler(this.checkBox4_Click);
             // 
             // Form1
             // 

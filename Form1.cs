@@ -20,6 +20,7 @@ namespace changeFilesNamesApp
         private DirectoryInfo di;
         private CheckBox folderUnificado;
         private bool corrupcion = false;
+        private Dictionary<string, string> aceptacionMasArticulos;
 
         public Form1()
         {
@@ -202,7 +203,6 @@ namespace changeFilesNamesApp
                 }
             };
 
-            //lineasArchivos = new string[i];
             i = 1;
 
             if (dataGridView2.Rows.Count < 1)
@@ -355,6 +355,44 @@ namespace changeFilesNamesApp
             if (checkBox1.Checked)
             {
                 CrearArticulos();
+            }
+
+        }
+
+        private void CrearMasArticulos(Dictionary<string,string> datos)
+        {
+            foreach (var i in datos) 
+            {
+                try
+                {
+                    FileInfo fi = new FileInfo(i.Key);
+
+                    if (fi.Extension == ".jpg" || fi.Extension == ".png" || fi.Extension == ".gif" || fi.Extension == ".bmp")
+                    {
+                        Image img = Image.FromFile(i.Value);
+                        string nombreArchivo = fi.Name.Remove(fi.Name.Length - 4);
+                        
+                        if (img.Width == 735 && img.Height == 735)
+                        {
+                            nombreArchivo = nombreArchivo + "_G" + fi.Extension;
+                        }
+                        else if (img.Width == 535 && img.Height == 535)
+                        {
+                            nombreArchivo = nombreArchivo + "_M" + fi.Extension;
+                        }
+                        else if (img.Width == 135 && img.Height == 135)
+                        {
+                            nombreArchivo = nombreArchivo + "_P" + fi.Extension;
+                        }
+
+                        File.Move(i.Key, rutaGeneral + "/articulos/" + nombreArchivo);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
             }
         }
 
@@ -571,6 +609,20 @@ namespace changeFilesNamesApp
                 Console.WriteLine("Ignora folder");
             }
             CargaDeArchivos(rutaGeneral);
+        }
+
+        private void checkBox4_Click(object sender, EventArgs e)
+        {
+            if (checkBox4.Checked)
+            {
+                MasArticulos ma = new MasArticulos(rutaGeneral);
+                ma.ShowDialog();
+                aceptacionMasArticulos = ma.archivos;
+                if (aceptacionMasArticulos == null) 
+                {
+                    checkBox4.Checked = false;
+                }
+            }
         }
     }
 }       
