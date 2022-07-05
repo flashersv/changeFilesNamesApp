@@ -202,7 +202,6 @@ namespace changeFilesNamesApp
                 }
             };
 
-            //lineasArchivos = new string[i];
             i = 1;
 
             if (dataGridView2.Rows.Count < 1)
@@ -326,7 +325,7 @@ namespace changeFilesNamesApp
                             File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
                         }
                         i++;
-                        lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg:" + i);
+                        lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg:" + orden);
                     }
                         
                 }
