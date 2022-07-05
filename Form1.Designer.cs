@@ -50,7 +50,6 @@ namespace changeFilesNamesApp
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.scanAndgroupBtn = new System.Windows.Forms.Button();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -271,23 +270,11 @@ namespace changeFilesNamesApp
             this.scanAndgroupBtn.UseVisualStyleBackColor = true;
             this.scanAndgroupBtn.Click += new System.EventHandler(this.scanAndgroupBtn_Click);
             // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(555, 224);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(146, 21);
-            this.checkBox4.TabIndex = 16;
-            this.checkBox4.Text = "Más de un artículo";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.Click += new System.EventHandler(this.checkBox4_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 586);
-            this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.scanAndgroupBtn);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.checkBox2);
@@ -336,7 +323,6 @@ namespace changeFilesNamesApp
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Button scanAndgroupBtn;
-        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
 

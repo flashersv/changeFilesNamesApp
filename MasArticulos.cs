@@ -16,6 +16,7 @@ namespace changeFilesNamesApp
         DirectoryInfo di;
         string ruta = "";
         public Dictionary<string, string> archivos = new Dictionary<string, string>();
+        bool ifAceptarClicked = false;
 
         public MasArticulos(string ruta)
         {
@@ -43,24 +44,28 @@ namespace changeFilesNamesApp
         private void CargarDirectoryInfo(string ruta)
         {
             this.ruta = ruta;
-            di = new DirectoryInfo(this.ruta);
 
+            try
+            {
+                di = new DirectoryInfo(this.ruta);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("No se ha seleccionado folder");
+                this.Close();
+                return;
+            }
             dataGridView1.Rows.Clear();
 
             foreach (var d in di.GetDirectories())
             {
-                dataGridView1.Rows.Add(d.Name, "Folder");
+                dataGridView1.Rows.Add(d.Name, null, "Folder");
             }
 
             foreach (var d in di.GetFiles())
             {
-                dataGridView1.Rows.Add(d.Name, "File");
+                dataGridView1.Rows.Add(d.Name, null, "File");
             }
-        }
-
-        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -78,13 +83,21 @@ namespace changeFilesNamesApp
                     archivos.Add(ruta + "/" + r.Cells[0].Value.ToString(), ruta + "/" + r.Cells[1].Value.ToString());
                 }
             }
-
+            ifAceptarClicked = true;
             this.Close();
         }
 
         private void MasArticulos_FormClosing(object sender, FormClosingEventArgs e)
         {
-            archivos = null;
+            if (!ifAceptarClicked)
+            {
+                archivos = null;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            CargarDirectoryInfo(Directory.GetParent(ruta).ToString());
         }
     }
 }

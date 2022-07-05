@@ -357,6 +357,35 @@ namespace changeFilesNamesApp
                 CrearArticulos();
             }
 
+            /*if (checkBox4.Checked)
+            {
+                if (aceptacionMasArticulos != null) 
+                {
+                    CrearMasArticulos(aceptacionMasArticulos);
+                }
+                else
+                {
+                    MessageBox.Show("Error en la creación de más artículos, de los básicos");
+                    checkBox4.Checked = false;
+                    return;
+                }
+            }*/
+
+            DialogResult mensaje =  MessageBox.Show("¿Este producto tiene más artículos además de los básicos?", "Más artículos", MessageBoxButtons.YesNo);
+            if (mensaje == DialogResult.Yes) 
+            {
+                MasArticulos ma = new MasArticulos(rutaGeneral);
+                ma.ShowDialog();
+                aceptacionMasArticulos = ma.archivos;
+
+                if (aceptacionMasArticulos != null) {
+                    CrearMasArticulos(aceptacionMasArticulos);
+                }
+                else { 
+                    return;
+                }
+            }
+
         }
 
         private void CrearMasArticulos(Dictionary<string,string> datos)
@@ -369,10 +398,13 @@ namespace changeFilesNamesApp
 
                     if (fi.Extension == ".jpg" || fi.Extension == ".png" || fi.Extension == ".gif" || fi.Extension == ".bmp")
                     {
-                        Image img = Image.FromFile(i.Value);
-                        string nombreArchivo = fi.Name.Remove(fi.Name.Length - 4);
-                        
-                        if (img.Width == 735 && img.Height == 735)
+                        //Image img = Image.FromFile(i.Key);
+                        string nombreArchivo = i.Value.Remove(i.Value.Length - 4);
+                        nombreArchivo = nombreArchivo + fi.Extension;
+                        nombreArchivo = nombreArchivo.Replace('\\', '/');
+                        string[] nombreArchivoArray = nombreArchivo.Split('/');
+                        nombreArchivo = nombreArchivoArray[nombreArchivoArray.Length - 1];
+                        /*if (img.Width == 735 && img.Height == 735)
                         {
                             nombreArchivo = nombreArchivo + "_G" + fi.Extension;
                         }
@@ -383,9 +415,16 @@ namespace changeFilesNamesApp
                         else if (img.Width == 135 && img.Height == 135)
                         {
                             nombreArchivo = nombreArchivo + "_P" + fi.Extension;
-                        }
+                        }*/
 
-                        File.Move(i.Key, rutaGeneral + "/articulos/" + nombreArchivo);
+                        if (!Directory.Exists(rutaGeneral + "/articulos/" + nombreArchivo))
+                        {
+                            File.Move(i.Key, Directory.GetParent(rutaGeneral) + "/articulos/" + nombreArchivo);
+                        }
+                        else
+                        {
+                            File.Move(i.Key, rutaGeneral + "/articulos/" + nombreArchivo);
+                        }
                     }
                 }
                 catch(Exception ex)
