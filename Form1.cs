@@ -398,25 +398,12 @@ namespace changeFilesNamesApp
 
                     if (fi.Extension == ".jpg" || fi.Extension == ".png" || fi.Extension == ".gif" || fi.Extension == ".bmp")
                     {
-                        //Image img = Image.FromFile(i.Key);
                         string nombreArchivo = i.Value.Remove(i.Value.Length - 4);
                         nombreArchivo = nombreArchivo + fi.Extension;
                         nombreArchivo = nombreArchivo.Replace('\\', '/');
                         string[] nombreArchivoArray = nombreArchivo.Split('/');
                         nombreArchivo = nombreArchivoArray[nombreArchivoArray.Length - 1];
-                        /*if (img.Width == 735 && img.Height == 735)
-                        {
-                            nombreArchivo = nombreArchivo + "_G" + fi.Extension;
-                        }
-                        else if (img.Width == 535 && img.Height == 535)
-                        {
-                            nombreArchivo = nombreArchivo + "_M" + fi.Extension;
-                        }
-                        else if (img.Width == 135 && img.Height == 135)
-                        {
-                            nombreArchivo = nombreArchivo + "_P" + fi.Extension;
-                        }*/
-
+                       
                         if (!Directory.Exists(rutaGeneral + "/articulos/" + nombreArchivo))
                         {
                             File.Move(i.Key, Directory.GetParent(rutaGeneral) + "/articulos/" + nombreArchivo);
@@ -650,19 +637,7 @@ namespace changeFilesNamesApp
             CargaDeArchivos(rutaGeneral);
         }
 
-        private void checkBox4_Click(object sender, EventArgs e)
-        {
-            if (checkBox4.Checked)
-            {
-                MasArticulos ma = new MasArticulos(rutaGeneral);
-                ma.ShowDialog();
-                aceptacionMasArticulos = ma.archivos;
-                if (aceptacionMasArticulos == null) 
-                {
-                    checkBox4.Checked = false;
-                }
-            }
-        }
+        
     }
 }       
 
