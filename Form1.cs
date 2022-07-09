@@ -24,6 +24,7 @@ namespace changeFilesNamesApp
         public Form1()
         {
             InitializeComponent();
+            
             folderUnificado = checkBox3;
             masArticulos = button2;
 
@@ -46,6 +47,7 @@ namespace changeFilesNamesApp
                 folderDir.Text = rutaGeneral;
                 masArticulos.Enabled = true;
                 CargaDeArchivos(rutaGeneral);
+                dataGridView1.ClearSelection();
             }
           
         }
