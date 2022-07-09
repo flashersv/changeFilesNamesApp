@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace changeFilesNamesApp
@@ -21,16 +18,25 @@ namespace changeFilesNamesApp
         private CheckBox folderUnificado;
         private bool corrupcion = false;
         private Dictionary<string, string> aceptacionMasArticulos;
+        private string rutaParaMasArticulos = "";
+        private Button masArticulos;
 
         public Form1()
         {
             InitializeComponent();
             folderUnificado = checkBox3;
+            masArticulos = button2;
+
+            if (string.IsNullOrEmpty(folderDir.Text)) 
+            {
+                masArticulos.Enabled = false;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folder = new FolderBrowserDialog();
+            folder.Reset();
             folder.SelectedPath = rutaGeneral;
             folder.ShowDialog();
 
@@ -38,6 +44,7 @@ namespace changeFilesNamesApp
             {
                 rutaGeneral = folder.SelectedPath;
                 folderDir.Text = rutaGeneral;
+                masArticulos.Enabled = true;
                 CargaDeArchivos(rutaGeneral);
             }
           
@@ -357,21 +364,7 @@ namespace changeFilesNamesApp
                 CrearArticulos();
             }
 
-            /*if (checkBox4.Checked)
-            {
-                if (aceptacionMasArticulos != null) 
-                {
-                    CrearMasArticulos(aceptacionMasArticulos);
-                }
-                else
-                {
-                    MessageBox.Show("Error en la creación de más artículos, de los básicos");
-                    checkBox4.Checked = false;
-                    return;
-                }
-            }*/
-
-            DialogResult mensaje =  MessageBox.Show("¿Este producto tiene más artículos además de los básicos?", "Más artículos", MessageBoxButtons.YesNo);
+            /*DialogResult mensaje =  MessageBox.Show("¿Este producto tiene más artículos además de los básicos?", "Más artículos", MessageBoxButtons.YesNo);
             if (mensaje == DialogResult.Yes) 
             {
                 MasArticulos ma = new MasArticulos(rutaGeneral);
@@ -384,11 +377,11 @@ namespace changeFilesNamesApp
                 else { 
                     return;
                 }
-            }
+            }*/
 
         }
 
-        private void CrearMasArticulos(Dictionary<string,string> datos)
+        private void CrearMasArticulos(Dictionary<string,string> datos, string rutaDondeGuardar)
         {
             foreach (var i in datos) 
             {
@@ -403,15 +396,17 @@ namespace changeFilesNamesApp
                         nombreArchivo = nombreArchivo.Replace('\\', '/');
                         string[] nombreArchivoArray = nombreArchivo.Split('/');
                         nombreArchivo = nombreArchivoArray[nombreArchivoArray.Length - 1];
-                       
-                        if (!Directory.Exists(rutaGeneral + "/articulos/" + nombreArchivo))
+
+                        /*if (!Directory.Exists(rutaGeneral + "/articulos/" + nombreArchivo))
                         {
                             File.Move(i.Key, Directory.GetParent(rutaGeneral) + "/articulos/" + nombreArchivo);
                         }
                         else
                         {
                             File.Move(i.Key, rutaGeneral + "/articulos/" + nombreArchivo);
-                        }
+                        }*/
+
+                        File.Move(i.Key, rutaDondeGuardar + "/" + nombreArchivo);
                     }
                 }
                 catch(Exception ex)
@@ -637,7 +632,22 @@ namespace changeFilesNamesApp
             CargaDeArchivos(rutaGeneral);
         }
 
-        
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MasArticulos ma = new MasArticulos(rutaGeneral);
+            ma.ShowDialog();
+            aceptacionMasArticulos = ma._Archivos;
+            rutaParaMasArticulos = ma._Ruta;
+
+            if (aceptacionMasArticulos != null)
+            {
+                CrearMasArticulos(aceptacionMasArticulos, rutaParaMasArticulos);
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }       
 

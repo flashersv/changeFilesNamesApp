@@ -14,9 +14,21 @@ namespace changeFilesNamesApp
     public partial class MasArticulos : Form
     {
         DirectoryInfo di;
-        string ruta = "";
-        public Dictionary<string, string> archivos = new Dictionary<string, string>();
+        private string ruta = "";
+        private Dictionary<string, string> archivos = new Dictionary<string, string>();
         bool ifAceptarClicked = false;
+
+        public string _Ruta
+        {
+            get { return ruta; }
+            set { ruta = value; }
+        }
+
+        public Dictionary<string, string> _Archivos
+        {
+            get { return archivos; }
+            set { archivos = value; }
+        }
 
         public MasArticulos(string ruta)
         {
@@ -44,7 +56,7 @@ namespace changeFilesNamesApp
         private void CargarDirectoryInfo(string ruta)
         {
             this.ruta = ruta;
-
+            textBox1.Text = ruta;
             try
             {
                 di = new DirectoryInfo(this.ruta);
@@ -76,15 +88,54 @@ namespace changeFilesNamesApp
 
         private void aceptarBtn_Click(object sender, EventArgs e)
         {
-            foreach(DataGridViewRow r in dataGridView1.Rows)
+            int conteo = 0;
+            /*foreach(DataGridViewRow r in dataGridView1.Rows)
             {
                 if(r.Cells[1].Value != null && !String.IsNullOrEmpty(r.Cells[1].Value.ToString()))
                 {
                     archivos.Add(ruta + "/" + r.Cells[0].Value.ToString(), ruta + "/" + r.Cells[1].Value.ToString());
                 }
             }
-            ifAceptarClicked = true;
-            this.Close();
+            ifAceptarClicked = true;*/
+
+            foreach(DataGridViewRow r in dataGridView1.Rows)
+            {
+                if (r.Cells[1].Value == null || r.Cells[1].Value == DBNull.Value || string.IsNullOrWhiteSpace(r.Cells[1].Value.ToString()))
+                {
+                    
+                }
+                else
+                {
+                    conteo++;
+                }
+            }
+
+            if (conteo < 1) 
+            {
+                MessageBox.Show("No ha colocado nombre(s) nuevo(s)");
+                return;
+            }
+
+            FolderBrowserDialog fo = new FolderBrowserDialog();
+            fo.Description = "Seleccione donde se guardaran estas fotos";
+            fo.ShowNewFolderButton = true;
+            fo.RootFolder = Environment.SpecialFolder.Desktop;
+            fo.SelectedPath = ruta;
+       
+            if (fo.ShowDialog() == DialogResult.OK) 
+            {
+                foreach (DataGridViewRow r in dataGridView1.Rows)
+                {
+                    if (r.Cells[1].Value != null && !String.IsNullOrEmpty(r.Cells[1].Value.ToString()))
+                    {
+                        archivos.Add(ruta + "/" + r.Cells[0].Value.ToString(), ruta + "/" + r.Cells[1].Value.ToString());
+                    }
+                }
+
+                ruta = fo.SelectedPath; 
+                ifAceptarClicked = true;
+                this.Close();
+            }
         }
 
         private void MasArticulos_FormClosing(object sender, FormClosingEventArgs e)
