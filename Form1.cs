@@ -650,6 +650,11 @@ namespace changeFilesNamesApp
                 return;
             }
         }
+
+        private void linkLabel1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Aplicación desarrollada por Ludwin Rodríguez", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }       
 
