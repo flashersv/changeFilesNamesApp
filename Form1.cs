@@ -20,6 +20,7 @@ namespace changeFilesNamesApp
         private Dictionary<string, string> aceptacionMasArticulos;
         private string rutaParaMasArticulos = "";
         private Button masArticulos;
+        private string letras = "";
 
         public Form1()
         {
@@ -127,55 +128,66 @@ namespace changeFilesNamesApp
             dataGridView1.Rows.Clear();
             dataGridView2.Rows.Clear();
 
-            foreach (var d in di.GetDirectories())
-            {
-                dataGridView2.Rows.Add(d.Name, "Folder");
-            }
-
-            foreach (var f in di.GetFiles())
-            {
-                if (f.Extension.ToLower() == ".zip")
+            try { 
+                foreach (var d in di.GetDirectories())
                 {
-                    dataGridView1.Rows.Add(f.Name, f.Extension);
+                    dataGridView2.Rows.Add(d.Name, "Folder");
                 }
-                else
+
+                foreach (var f in di.GetFiles())
                 {
-                    if (!folderUnificado.Checked)
+                    if (f.Extension.ToLower() == ".zip")
                     {
-                        dataGridView2.Rows.Add(f.Name, "File", ordenNumerico);
-                        ordenNumerico++;
+                        dataGridView1.Rows.Add(f.Name, f.Extension);
                     }
                     else
                     {
-                        dataGridView2.Rows.Add(f.Name, "File", null);
+                        if (!folderUnificado.Checked)
+                        {
+                            dataGridView2.Rows.Add(f.Name, "File", ordenNumerico);
+                            ordenNumerico++;
+                        }
+                        else
+                        {
+                            dataGridView2.Rows.Add(f.Name, "File", null);
+                        }
                     }
                 }
-            }
 
-            dataGridView1.Sort(dataGridView1.Columns[0], ListSortDirection.Ascending);
-            dataGridView2.Sort(dataGridView2.Columns[0], ListSortDirection.Ascending);
+                dataGridView1.Sort(dataGridView1.Columns[0], ListSortDirection.Ascending);
+                dataGridView2.Sort(dataGridView2.Columns[0], ListSortDirection.Ascending);
 
-            if(File.Exists(ruta + "/data/ordn.txt"))
-            {
-                dataGridView2.Rows.Clear();
-                using (StreamReader sr = new StreamReader(ruta + "/data/ordn.txt"))
+                if(File.Exists(ruta + "/data/ordn.txt"))
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    dataGridView2.Rows.Clear();
+                    using (StreamReader sr = new StreamReader(ruta + "/data/ordn.txt"))
                     {
-                        string[] ss = line.Split(':');
-                        dataGridView2.Rows.Add(ss[0], "File", ss[1]);
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            string[] ss = line.Split(':');
+                            dataGridView2.Rows.Add(ss[0], "File", ss[1]);
+                        }
                     }
                 }
-            }
 
-            if(dataGridView2.Rows.Count > 0)
-            {
-                folderUnificado.Enabled = true;
+                if(dataGridView2.Rows.Count > 0)
+                {
+                    folderUnificado.Enabled = true;
+                }
+                else
+                {
+                    folderUnificado.Enabled = false;
+                }
             }
-            else
+            catch(DirectoryNotFoundException ex)
             {
-                folderUnificado.Enabled = false;
+                MessageBox.Show("Directorio no encontrado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
             }
         }
 
@@ -654,6 +666,31 @@ namespace changeFilesNamesApp
         private void linkLabel1_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Aplicación desarrollada por Ludwin Rodríguez", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void folderDir_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                rutaGeneral = folderDir.Text;
+                CargaDeArchivos(rutaGeneral);
+            }
+        }
+
+        private void buscadorTxt_KeyUp(object sender, KeyEventArgs e)
+        {
+            letras = buscadorTxt.Text;
+
+            Console.WriteLine(letras);
+
+            foreach (DataGridViewRow r in dataGridView2.Rows)
+            {
+                if (r.Cells[0].Value.ToString().ToLower().Substring(0).Equals(letras.ToLower()))
+                {
+                    dataGridView2.FirstDisplayedScrollingRowIndex = r.Index;
+                    dataGridView2.Rows[r.Index].Selected = true;
+                }
+            }
         }
     }
 }       

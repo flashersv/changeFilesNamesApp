@@ -52,6 +52,8 @@ namespace changeFilesNamesApp
             this.scanAndgroupBtn = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.buscadorTxt = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -61,9 +63,9 @@ namespace changeFilesNamesApp
             this.folderDir.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.folderDir.Location = new System.Drawing.Point(12, 32);
             this.folderDir.Name = "folderDir";
-            this.folderDir.ReadOnly = true;
             this.folderDir.Size = new System.Drawing.Size(655, 22);
             this.folderDir.TabIndex = 0;
+            this.folderDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.folderDir_KeyDown);
             // 
             // button1
             // 
@@ -285,7 +287,7 @@ namespace changeFilesNamesApp
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 555);
+            this.linkLabel1.Location = new System.Drawing.Point(12, 595);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(131, 17);
             this.linkLabel1.TabIndex = 17;
@@ -293,11 +295,30 @@ namespace changeFilesNamesApp
             this.linkLabel1.Text = "Acerca de esta app";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
             // 
+            // buscadorTxt
+            // 
+            this.buscadorTxt.Location = new System.Drawing.Point(116, 547);
+            this.buscadorTxt.Name = "buscadorTxt";
+            this.buscadorTxt.Size = new System.Drawing.Size(136, 22);
+            this.buscadorTxt.TabIndex = 18;
+            this.buscadorTxt.KeyUp += new System.Windows.Forms.KeyEventHandler(this.buscadorTxt_KeyUp);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(9, 550);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(101, 17);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "Buscar en lista";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 586);
+            this.ClientSize = new System.Drawing.Size(800, 621);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.buscadorTxt);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.scanAndgroupBtn);
@@ -350,6 +371,8 @@ namespace changeFilesNamesApp
         private System.Windows.Forms.Button scanAndgroupBtn;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.TextBox buscadorTxt;
+        private System.Windows.Forms.Label label5;
     }
 }
 
