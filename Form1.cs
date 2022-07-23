@@ -344,10 +344,10 @@ namespace changeFilesNamesApp
                         }
                         else
                         {
-                            File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg");
+                            File.Move(rutaGeneral + "/" + d.Cells[0].Value.ToString(), rutaGeneral + "/" + prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + (!checkBox3.Checked ? "_" : "") + orden + ".jpg");
                         }
                         i++;
-                        lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + "_" + orden + ".jpg:" + orden);
+                        lineasArchivos.Add(prefijoTxt.Text.Substring(0, prefijoTxt.Text.Length - 1) + agregarAPrefijo + (!checkBox3.Checked ? "_" : "") + orden + ".jpg:" + orden);
                     }
                         
                 }
@@ -680,8 +680,8 @@ namespace changeFilesNamesApp
         private void buscadorTxt_KeyUp(object sender, KeyEventArgs e)
         {
             letras = buscadorTxt.Text;
-
             Console.WriteLine(letras);
+            int en = 0;
 
             foreach (DataGridViewRow r in dataGridView2.Rows)
             {
