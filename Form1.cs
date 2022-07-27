@@ -673,6 +673,12 @@ namespace changeFilesNamesApp
             if(e.KeyCode == Keys.Enter)
             {
                 rutaGeneral = folderDir.Text;
+
+                if (Directory.Exists(rutaGeneral))
+                {
+                    button2.Enabled = true;
+                }
+
                 CargaDeArchivos(rutaGeneral);
             }
         }
